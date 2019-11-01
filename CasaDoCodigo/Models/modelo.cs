@@ -148,6 +148,6 @@ namespace CasaDoCodigo.Models
             Nome = nome;
         }
         public string Nome { get; set; }
-        public virtual Produto Produto { get; set; }
+        public virtual IList<Produto> Produtos { get; set; } = new List<Produto>();
     }
 }

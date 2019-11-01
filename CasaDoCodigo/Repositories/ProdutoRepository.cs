@@ -1,4 +1,5 @@
 ﻿using CasaDoCodigo.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,27 @@ namespace CasaDoCodigo.Repositories
         public IList<Produto> GetProdutos()
         {
             return dbSet.ToList();
+        }
+        public IList<Categoria> GetProdutosCategoria(ModelStateDictionary modelState, string pesquisa)
+        {
+            var categorias = CategoriaRepository.GetCategoria().ToList();
+
+            if (!string.IsNullOrEmpty(pesquisa))
+            {
+                categorias.ForEach(c =>
+                    c.Produtos = dbSet.Where(p => p.CategoriaId ==c.Id &&( p.Nome.ToUpper().Contains(pesquisa.ToUpper()) || c.Nome.ToUpper().Contains(pesquisa.ToUpper()))).ToList()
+                );
+                categorias = categorias.Where(c => c.Produtos.Count() > 0).ToList();
+                if (categorias.Count() <= 0)
+                {
+                    modelState.AddModelError("Pesquisa_Produto", "Não foram encontrados produtos com o termo pesquisado.");
+                }
+                return categorias;
+            }
+
+            categorias.ForEach(c => c.Produtos = dbSet.Where(p => p.CategoriaId == c.Id).ToList());
+
+            return categorias;
         }
 
         public async Task SaveProdutos(List<Livro> livros)

@@ -9,6 +9,7 @@ namespace CasaDoCodigo.Repositories
     public interface ICategoriaRepository
     {
         Task<Categoria> AddCategoria(string Nome);
+        IList<Categoria> GetCategoria();
     }
     public class CategoriaRepository : BaseRepository<Categoria>, ICategoriaRepository
     {
@@ -30,6 +31,12 @@ namespace CasaDoCodigo.Repositories
 
             return categoria;
 
+        }
+
+        public IList<Categoria> GetCategoria()
+        {
+            var categoria = dbSet.ToList();
+            return categoria;
         }
     }
 }
