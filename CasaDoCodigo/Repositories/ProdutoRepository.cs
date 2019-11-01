@@ -19,7 +19,12 @@ namespace CasaDoCodigo.Repositories
         {
             return dbSet.ToList();
         }
-
+        public IList<Categoria> GetProdutosByCategoria()
+        {
+            var categorias = CategoriaRepository.GetCategoria().ToList();
+            categorias.ForEach(c => c.Produtos = dbSet.Where(p => p.CategoriaId == c.Id).ToList());
+            return categorias;
+        }
         public async Task SaveProdutos(List<Livro> livros)
         {
             foreach (var livro in livros)
