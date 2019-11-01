@@ -39,6 +39,7 @@ namespace CasaDoCodigo
             services.AddTransient<ICadastroRepository, CadastroRepository>();
             services.AddTransient<IItemPedidoRepository, ItemPedidoRepository>();
             services.AddTransient<ICategoriaRepository, CategoriaRepository>();
+            services.AddHttpContextAccessor();
 
         }
 
@@ -68,7 +69,7 @@ namespace CasaDoCodigo
                     template: "{controller=Pedido}/{action=Carrossel}/{codigo?}");
             });
 
-            serviceProvider.GetService<IDataService>().InicializaDB().Wait();
+            //serviceProvider.GetService<IDataService>().InicializaDB().Wait();
         }
     }
 
