@@ -2,6 +2,7 @@
 using CasaDoCodigo.Models.ViewModels;
 using CasaDoCodigo.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,9 +30,29 @@ namespace CasaDoCodigo.Controllers
             return View(produtoRepository.GetProdutos());
         }
 
-        public IActionResult BuscaProdutos()
+        public IActionResult BuscaProdutos(ModelStateDictionary modelState,BuscaProdutosViewModel model = null)
         {
-            return View(produtoRepository.GetProdutosByCategoria());
+            var pesquisa = string.Empty;
+            if (model is BuscaProdutosViewModel)
+            {
+                pesquisa = model.Pesquisa;
+            }
+            var categorias = produtoRepository.GetProdutosCategoria(modelState, pesquisa);
+
+            var erro = string.Empty;
+            if (!modelState.IsValid)
+            {
+                var modelErrors = new List<string>();
+                foreach (var _modelState in modelState.Values)
+                {
+                    foreach (var modelError in _modelState.Errors)
+                    {
+                        erro = modelError.ErrorMessage;
+                        break;
+                    }
+                }
+            }
+            return View(new BuscaProdutosViewModel(categorias, pesquisa, erro));
         }
         public async Task<IActionResult> Carrinho(string codigo)
         {

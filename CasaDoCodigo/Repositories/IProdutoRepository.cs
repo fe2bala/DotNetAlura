@@ -1,4 +1,5 @@
 ﻿using CasaDoCodigo.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,6 +9,6 @@ namespace CasaDoCodigo.Repositories
     {
         Task SaveProdutos(List<Livro> livros);
         IList<Produto> GetProdutos();
-        IList<Categoria> GetProdutosByCategoria();
+        IList<Categoria> GetProdutosCategoria(ModelStateDictionary modelState, string pesquisa);
     }
 }
